@@ -1,45 +1,48 @@
 /*
- Exercice
- */
-/*
+UTILISATION DES FICHIERS STATIQUES 3
 
------- 1 ------
-Créez deux dossiers à côté de votre fichier. Placez une image dans chaque dossier.
+Introduction
 
------- 2 ------
-Déclarez successivement ces deux dossiers dans votre fichier JavaScript.
-
------- 3 ------
-Quand l'utilisateur se connecte à votre serveur, envoyez-lui la balise image  correspondant au premier dossier.
-
------- 4 ------
-S'il saisit le texte 'image' dans l'URL, affichez lui l'image correspondant au second dossier.
+La méthode sendFile de l'objet réponse permet d'envoyer un fichier spécifique au client.
+Elle s'utilise de la manière suivante :
+res.sendFile('<nom_du_fichier>', options);
+options: un objet contenant le dossier racine. Par exemple : {root: 'fichiers'}
 */
 
+/*
+Exercice
 
+Étape 1 :
+Créez un document HTML. Intégrez au moins header,un titre et une balise image.
+Placez ce document et l'image dans un dossier.
 
-const express = require("express");
+Étape 2 :
+Utilisez la méthode sendFile pour envoyer le fichier au client.
+*/
+
 const app = require("express")();
 
+
 // Port sur lequel le serveur va écouter
-const port = 3000;
+
 
 // Utilisation d'un middleware pour servir les fichiers statiques du dossier 'images'
 app.use("/img", express.static(__dirname + "/images"));
-app.use("/icon", express.static(__dirname + "/icons"));
+app.use("/icon", express.static(__dirname + "/icon"));
 
 // Route pour la racine (GET sur "/") qui envoie une balise image
 app.get("/", (req, res) => {
   // Envoie la balise image avec l'attribut src pointant vers l'image "volley.jpg"
-  res.send('<img src="/icon/nature.png" alt="nature">');
+  res.send('<img src="/icon/animal.jpg" alt="animal">');
 });
-app.use("/img", express.static(__dirname + "/images"));
 
-
-app.get('/', (req, res) => {
-
-  res.send('<img src="/img/nature.jpg" alt="Mon Image">');
+app.get("/img", (req, res) => {
+  res.send('<img src="/img/nature.jpg" alt="nature">');
 });
-app.listen(port, () => {
+app.get("/quit", (req, res) => {
+  res.send("bye bye, vous etes sur /quit");
+});
+
+app.listen(3000, () => {
   console.log("server4 en ecoute sur http://localhost:3000/");
 });

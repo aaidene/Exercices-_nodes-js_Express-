@@ -1,0 +1,295 @@
+/*
+Express.js est un framework de Node.js qui simplifie la création d'applications web. Avant de l'utiliser, il faut d'abord l'installer dans le répertoire où se trouve l'application. Voici les étapes à suivre :
+
+Créez un fichier package.json en exécutant la commande suivante et en répondant aux questions posées :
+  npm init
+Installez ensuite Express.js en utilisant cette commande 
+  npm install express 
+
+Après avoir installé Express.js, vous êtes prêt à créer votre premier serveur web avec ce framework.
+*/
+*****server avec node :
+
+const http = require("http");
+const server = http.createServer((requete, reponse) => {
+  if (requete.url === "/" && requete.method === "GET") {
+    reponse.writeHead(200, { "Content-Type": "text/plain" });
+    reponse.end("Bienvenue sur notre serveur Express.js !");
+  } else {
+    reponse.writeHead(404, { "Content-Type": "text/plain" });
+    reponse.end("Not Found");
+  }
+});
+const port = 3000;
+server.listen(3000, () => {
+  console.log("Server started at http://localhost:3000");
+});
+----------exe
+Dans le fichier exercice1.js, suivez les instructions ci-dessous :
+
+ 1 
+Importez le module Express.js en utilisant require. Stockez la valeur retournée dans une variable nommée express. Ensuite, exécutez cette variable et stockez le résultat dans une variable nommée app.
+
+ 2 
+Utilisez la méthode get sur l'objet contenu dans la variable app. Cette méthode prend deux arguments :
+
+le chemin d'accès, ici la racine ("/").
+une fonction flechée de gestion de la requête.
+Cette fonction doit avoir deux paramètres : requete et reponse (req,res). Dans cette fonction, utilisez la méthode send sur l'objet reponse.
+ 3 
+Finalisez votre fichier JavaScript en utilisant la méthode listen sur l'objet contenu dans la variable app. Cette méthode a deux arguments :
+
+le numéro du port d'écoute
+une fonction flechée de rappel.
+Dans cette fonction, utilisez console.log pour afficher le numéro du port d'écoute.
+ 4 
+Démarrez le serveur en exécutant : nodemon exercice_01.js
+Accédez au serveur depuis votre navigateur web.
+*/// Importer le module Express
+const express = require("express");
+
+// Créer une instance de l'application Express
+const app = express();
+
+// Définir une route pour la racine (GET sur "/") qui envoie un message de bienvenue
+app.get("/", (requete, reponse) => {    
+  reponse.send("Bienvenue sur notre serveur Express.js !");
+});
+
+// Définir le port d'écoute du serveur
+const port = 3000;
+
+// Démarrer le serveur et écouter sur le port spécifié, puis afficher un message dans la console
+app.listen(port, () => {
+  console.log(`Serveur1 en écoute sur le http://127.0.0.1:3000/ `);
+});
+
+************exe2
+*
+GESTION DES ROUTES 1
+*/
+
+/*
+Un serveur web doit être capable de répondre correctement en fonction de l'URL demandée par le client. Dans cet exercice, nous allons explorer la gestion de base des requêtes avec la méthode get d'Express.js.
+*/
+
+/*
+Exercice
+nous allons reproduire le comportement du code suivant en utilisant express
+
+const http = require("http");
+const url = require("url");
+
+const port = 3000;
+
+const server = http.createServer((req, res) => {
+  const parsedUrl = url.parse(req.url, true);
+
+  if (parsedUrl.pathname === "/" && req.method === "GET") {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("Bienvenue sur notre serveur Express.js !");
+  } else if (parsedUrl.pathname === "/quit" && req.method === "GET") {
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end("vous etes sur /quit");
+  } else {
+    res.writeHead(404, { "Content-Type": "text/plain" });
+    res.end("Not Found");
+  }
+});
+
+server.listen(port, () => {
+  console.log("server2 en ecoute sur http://localhost:3000/");
+});
+
+
+Express.js gère certaines erreurs par défaut, telles que les erreurs 404 (page introuvable) et les erreurs 500 (erreur interne du serveur). 
+------ 1 ------
+Reprenez le code de l'exercice précédent. Lorsque l'utilisateur accède à l'URL racine, affichez un message.
+
+------ 2 ------
+En utilisant une autre méthode get sur l'objet stocké dans la variable app, affichez un message différent dans le navigateur lorsque l'utilisateur ajoute le mot "quit" à l'URL racine.
+*/
+
+**********************exe3
+/*
+Un serveur a souvent besoin de fournir des fichiers statiques tels que les fichiers CSS, JavaScript, images, sons, vidéos, etc. 
+Avec Express.js, il est possible de référencer ces fichiers en les plaçant dans un sous-dossier. 
+Il faut déclarer ce sous-dossier dans le fichier JavaScript, avant la gestion des routes (app.get(), …) comme ceci :
+app.use("/<dossier>", express.static(__dirname + '/<dossier>'));
+Ensuite, on peut appeler l'élément dans le document HTML envoyé au client en utilisant une URL relative.
+*/
+
+/*
+Exercice
+
+Vous devez envoyer au client une balise image en utilisant la méthode send de l'objet réponse. Suivez ces étapes :
+
+Étape 1 :
+Reprenez le code de l'exercice précédent. Modifiez ce code pour envoyer une image plutôt qu'un simple message texte.
+
+Étape 2 :
+Créez un dossier à côté de votre fichier JavaScript, par exemple img, et placez-y une image (par exemple mon_image.jpg). Dans votre fichier JavaScript, déclarez ce dossier en utilisant la méthode app.use() et express.static() pour indiquer à Express.js de fournir les fichiers statiques de ce dossier. (Vous pouvez utiliser __dirname pour indiquer le chemin complet du dossier.)
+
+Étape 3 :
+Lorsqu'un utilisateur se connecte à votre serveur, envoyez-lui une balise image en utilisant la méthode send() de l'objet réponse. Assurez-vous que l'attribut src de la balise img pointe vers l'image que vous avez placée dans le dossier img. (Vous pouvez utiliser un chemin relatif pour l'attribut src de la balise img, par exemple /img/mon_image.jpg.)
+*/
+----
+const express = require("express");
+const app = require("express")();
+
+// Port sur lequel le serveur va écouter
+const port = 3000;
+
+// Utilisation d'un middleware pour servir les fichiers statiques du dossier 'images'
+app.use("/img", express.static(__dirname + "/images"));
+
+// Route pour la racine (GET sur "/") qui envoie une balise image
+app.get("/", (req, res) => {
+  // Envoie la balise image avec l'attribut src pointant vers l'image "volley.jpg"
+  res.send('<img src="/img/volley.jpg" alt="volley">');
+});
+
+// Route pour l'URL "/quit" qui envoie un message texte
+app.get("/quit", (req, res) => {
+  res.send("bye bye, vous etes sur /quit");
+});
+
+app.listen(port, () => {
+  console.log("server3 en ecoute sur http://localhost:3000/");
+});
+
+***********exercice_04.js*********************
+/*
+ UTILISATION DES FICHIERS STATIQUES 2
+ */
+
+/*
+Vous pouvez déclarer autant de dossier statique que vous le souhaitez.
+*/
+
+/*
+ Exercice
+ */
+/*
+
+------ 1 ------
+Créez deux dossiers à côté de votre fichier. Placez une image dans chaque dossier.
+
+------ 2 ------
+Déclarez successivement ces deux dossiers dans votre fichier JavaScript.
+
+------ 3 ------
+Quand l'utilisateur se connecte à votre serveur, envoyez-lui la balise image  correspondant au premier dossier.
+
+------ 4 ------
+S'il saisit le texte 'image' dans l'URL, affichez lui l'image correspondant au second dossier.
+*/
+
+***********
+
+const express = require("express");
+const app = require("express")();
+
+// Port sur lequel le serveur va écouter
+const port = 3000;
+
+// Utilisation d'un middleware pour servir les fichiers statiques du dossier 'images'
+app.use("/img", express.static(__dirname + "/images"));
+app.use("/icon", express.static(__dirname + "/icons"));
+
+// Route pour la racine (GET sur "/") qui envoie une balise image
+app.get("/", (req, res) => {
+  // Envoie la balise image avec l'attribut src pointant vers l'image "volley.jpg"
+  res.send('<img src="/icon/pirate.png" alt="pirate">');
+});
+
+app.get("/image", (req, res) => {
+  res.send('<img src="/img/volley.jpg" alt="volley">');
+});
+app.get("/quit", (req, res) => {
+  res.send("bye bye, vous etes sur /quit");
+});
+
+app.listen(port, () => {
+  console.log("server4 en ecoute sur http://localhost:3000/");
+});
+***************exe5****************
+/*
+UTILISATION DES FICHIERS STATIQUES 3
+
+Introduction
+
+La méthode sendFile de l'objet réponse permet d'envoyer un fichier spécifique au client.
+Elle s'utilise de la manière suivante :
+res.sendFile('<nom_du_fichier>', options);
+options: un objet contenant le dossier racine. Par exemple : {root: 'fichiers'}
+*/
+
+/*
+Exercice
+
+Étape 1 :
+Créez un document HTML. Intégrez au moins header,un titre et une balise image.
+Placez ce document et l'image dans un dossier.
+
+Étape 2 :
+Utilisez la méthode sendFile pour envoyer le fichier au client.
+*/
+----------serverJS
+
+const express = require("express");
+const app = express();
+const port = 3000;
+
+// Middleware pour servir des fichiers statiques.
+// qui se trouve dans le même répertoire que ce script.
+
+// app.use( express.static(`${__dirname}/public`));
+app.use(express.static("public"));
+
+// Route pour la racine de l'application.
+// Lorsqu'une requête GET est faite à l'adresse '/',
+// le serveur envoie le fichier 'exe5.html' situé dans le dossier 'public'.
+app.get("/", (req, res) => {
+  res.sendFile("exe5.html", { root: "public" });
+});
+
+// Démarrage du serveur sur le port défini.
+// Une fois le serveur démarré, il affiche un message dans la console
+// indiquant qu'il est en écoute sur http://localhost:3000/.
+app.listen(port, () => {
+  console.log("server 5 en ecoute sur http://localhost:3000/");
+});
+
+--------html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>exe5</title>
+  </head>
+  <body>
+    <h1>UTILISATION DES FICHIERS STATIQUES 3</h1>
+    <img style="width: 33%" src="/img/fullStack.png" alt="fullStack" />
+  </body>
+</html>
+
+**********exe6
+/*
+ROUTES ET FICHIERS STATIQUES PERSONNALISÉS
+
+En explorant la gestion des routes et l'intégration des fichiers statiques, vous allez créer un petit site web avec Express.js.
+*/
+
+/*
+Exercice
+
+Dans un dossier public, créez trois documents HTML (index, about et contact )  :
+Chaque document doit contenir un titre  un menu de navigation, une balise image et un footer.
+Utilisez le même fichier CSS pour les trois documents afin d'assurer une apparence cohérente,
+Prévoyez une image d'en-tête à inclure dans chacun des documents.
+Intégrez un menu de navigation dans chacune des trois pages, comprenant trois liens : index, about et contact  Page 1 et Page 2. Ces liens permettront de naviguer entre les différentes pages.
+Utilisez un middleware app.use() pour servir les fichiers statiques et trois gestionnaires de routes app.get() pour chacune des pages.
+*/

@@ -1,0 +1,125 @@
+/*TRAITER LES ERREURS*/
+
+/*
+Il est important de prendre en compte les cas où l'utilisateur ne saisit aucune adresse valide. 
+La gestion des erreurs de routes est un aspect important du développement d'applications web. Lorsque l'utilisateur saisit une adresse invalide, il est essentiel de générer une réponse appropriée avec un code d'erreur 404 (Non trouvé) suivi d'une page spécifique.
+
+Pour mettre en place cette gestion, nous pouvons créer une route spécifique qui sera atteinte uniquement si toutes les autres routes ont échoué à traiter la requête. Cette route doit être positionnée après toutes les autres dans la chaîne de middleware.
+
+Voici comment ajouter la gestion de la page 404 à votre application Express :
+    app.use(function (req, res) {
+      res.status(404).render('error404');
+    });
+Dans ce cas, next n'est pas nécessaire car il n'y a pas de middleware supplémentaire à exécuter après le gestionnaire d'erreur 404. Une fois que la middleware res.render('error404') a été exécutée, elle termine le traitement de la requête en envoyant la réponse au client.
+
+*/
+
+/*
+Exercice
+développez une application Express avec 3 route qui renvois  chaqune un fichier ejs   
+
+Ajoutez la gestion de la page 404 .
+
+Prévoyez d'afficher une page particulière si la requête envoyée ne correspond à aucune route gérée par le site.
+
+*/
+
+*********exe15
+
+app.get('/example', (req, res) => {
+  req.session.username = 'John';
+  req.session.isLoggedIn = true;
+  res.send('Données de session stockées');
+});
+Dans cet exemple, nous stockons le nom d'utilisateur et l'état de connexion dans la session. 
+Les données de session seront associées à l'utilisateur en fonction du cookie de session.
+
+Pour accéder aux données de session dans une autre route ou middleware, vous pouvez simplement utiliser req.session :
+app.get('/profile', (req, res) => {
+  const username = req.session.username;
+  const isLoggedIn = req.session.isLoggedIn;
+  res.send(`Nom d'utilisateur : ${username}, Connecté : ${isLoggedIn}`);
+});
+Dans cet exemple, nous récupérons les données de session précédemment stockées et les utilisons pour afficher les informations de profil de l'utilisateur.
+
+Déconnexion et suppression de session
+Pour déconnecter un utilisateur et supprimer sa session, vous pouvez utiliser req.session.destroy() :
+app.get('/logout', (req, res) => {
+  req.session.destroy();
+  res.send('Vous êtes déconnecté');
+});
+L'appel à req.session.destroy() supprime la session de l'utilisateur, y compris toutes les données
+*/
+
+/*
+Créez un fichier js avec Express qui affiche le contenu d'un template ejs.
+
+------ 1 ------
+Créez dans la variable de session un compteur en utilisant req.session.
+------ 2 ------
+Pour chaque connexion, incrémentez le compteur et affichez la valeur dans le navigateur.
+*/
+
+
+const express = require("express");
+const session = require("express-session");
+const crypto = require("crypto");
+
+const key = crypto.randomBytes(32).toString("hex");
+const app = express();
+const port = 3000;
+
+app.set("view engine", "ejs");
+app.set("views", "views");
+
+app.use(
+  session({
+    secret: key, // Clé secrète utilisée pour signer le cookie de session
+    saveUninitialized: false, // Ne pas sauvegarder les sessions non initialisées
+    resave: false, // Ne pas réenregistrer la session si elle n'a pas été modifiée
+  })
+);
+
+// Middleware pour gérer le compteur
+app.use((req, res, next) => {
+  // Vérifier si le compteur existe dans la session
+  if (!req.session.visite) {
+    // Initialiser le compteur à 0
+    req.session.visite = 0;
+  }
+  // Incrémenter le compteur
+  req.session.visite++;
+  next();
+});
+
+app.get("/", (req, res) => {
+  const visite = req.session.visite;
+  console.log(key);
+  res.render("index_ejs", { visite });
+});
+
+app.listen(port, () => {
+  console.log("http://localhost:3000/");
+});
+
+// vous pouvez utiliser le module crypto intégré pour générer une clé aléatoire sécurisée :
+// const crypto = require('crypto');
+// const key = crypto.randomBytes(32).toString('hex');
+
+----------ejs
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>sessions</title>
+  </head>
+  <body>
+    <h1>sessions</h1>
+    <p>
+      <% if(typeof visite !== 'undefined') { %>vous avez visité la page <%=
+      visite %> fois <% } else { %> hello <% } %>
+    </p>
+  </body>
+</html>

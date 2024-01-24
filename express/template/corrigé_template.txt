@@ -1,0 +1,265 @@
+/*
+
+
+UTILISATION DES TEMPLATES - PREMIERS PAS
+
+Présentation:
+
+L'utilisation de template permet de simplifier l'écriture des pages en HTML et de gérer facilement l'affichage des données contenues dans une variable.
+
+Le template souvent utilisé avec Express.js est EJS (Embedded JavaScript).
+Vous trouverez l'ensemble des possibilités de ce moteur de template dans la documentation : https://ejs.co/ (Menu "Docs" dans la barre de navigation).
+
+Ses avantages :
+Syntaxe simple : EJS utilise des balises HTML traditionnelles et des balises EJS pour incorporer du code JavaScript, ce qui rend la syntaxe relativement facile à apprendre et à comprendre.
+
+Grande flexibilité : EJS permet d'incorporer du code JavaScript directement dans les fichiers de templates, ce qui offre une grande flexibilité dans la génération de contenu dynamique pour les pages web.
+
+Grande compatibilité : EJS est compatible avec tous les navigateurs modernes et peut être utilisé avec de nombreux frameworks web populaires pour Node.js, tels que Express.
+
+Bonne performance : EJS est connu pour être un moteur de templates rapide et efficace, ce qui peut être un avantage pour les applications web qui ont besoin de générer du contenu dynamique à grande échelle.
+
+Grande communauté : EJS est utilisé par une grande communauté de développeurs Node.js, ce qui signifie que vous pouvez trouver de nombreuses ressources et des exemples de code pour vous aider à utiliser EJS dans votre projet.
+
+Pour utiliser EJS, vous devez tout d'abord installer le module correspondant (npm install ejs).
+*/
+
+***************exe7
+
+/*
+Exercice
+Affichons une page à l'aide du moteur de template EJS.
+Installez le module EJS en utilisant la commande npm install ejs. 
+
+ 1 
+Créez un dossier views pour les fichiers de templates
+Vous pouvez placer le dossier views à la racine de votre projet
+
+ 2 
+Vous spécifiez que vous utilisez le module EJS : app.set('view engine', 'ejs').
+Pour utiliser le dossier des fichiers statiques pour les fichiers EJS, vous devez utilisez la méthode suivante : app.set('views','<chemin du dossier>');
+
+ 3 
+Pour appeler le fichier EJS, vous utilisez la méthode res.render('<nom du fichier sans extension>')
+*/
+
+const express = require("express");
+const app = express();
+
+// Spécifier l'utilisation d'EJS comme moteur de template
+app.set("view engine", "ejs");
+// Spécifier le dossier contenant les fichiers de template EJS
+app.set("views", "./views");
+
+// Utiliser le dossier 'public' pour servir les fichiers statiques
+app.use(express.static("public"));
+
+app.get("/", (req, res) => {
+  res.render("premiersPas");
+});
+
+// Démarrer le serveur
+app.listen(3000, () => {
+  console.log("server 7 en ecoute sur http://127.0.0.1:3000/");
+});
+
+***********exe8
+/*
+UTILISATION DES TEMPLATES - UTILISATION DE VARIABLES
+
+Présentation
+
+EJS permet de traiter le contenu d'une variable.
+Dans la méthode res.render, on fournit un second argument sous la forme d'un objet. Chaque propriété de cet objet peut être utilisée dans le template de la façon suivante :
+res.render(<nom du fichier>, {valeur1: 'un texte', valeur2 : 'un autre texte'})
+
+template EJS :
+Les balises <%= %> permettent d'insérer des variables dans le template.
+<p><%= valeur1 %></p>
+Ceci donnera <p>un texte<p> dans le document HTML transmis au client.
+*/
+
+/*
+Exercice
+
+------ 1 ------
+Reprenez les documents de l'exercice précédent.
+
+------ 2 ------
+Transmettez le nom de la page et le titre du h1 dans l'objet passé en second argument de la méthode res.render et affichez-les dans votre document HTML envoyé au client.
+*/
+
+const express = require("express");
+
+// Crée une nouvelle instance d'Express pour gérer les requêtes et les réponses.
+const app = express();
+
+// Définit le port sur lequel le serveur va écouter les requêtes.
+const port = 3000;
+
+// Configure Express pour utiliser EJS comme moteur de template (vue).
+// Cela permet d'utiliser des fichiers EJS pour générer du HTML dynamique.
+app.set("view engine", "ejs");
+
+// Définit le dossier où Express va chercher les fichiers de template EJS.
+// Ici, les fichiers EJS doivent être placés dans le dossier 'views'.
+app.set("views", "./views");
+
+// Définit une route pour la racine ('/') de l'application.
+// Quand cette route est demandée, elle envoie une réponse en utilisant le template EJS 'index'.
+// Des données ('nomDePage' et 'titreH1') sont passées au template pour le rendu dynamique.
+app.get("/", (req, res) => {
+  res.render("premiersPas", {
+    nomDePage: "ejs",
+    titreH1: "Bienvenue sur mon site",
+  });
+});
+
+// Démarre le serveur pour qu'il écoute les requêtes sur le port spécifié.
+// Affiche un message dans la console une fois que le serveur est lancé.
+app.listen(port, () => {
+  console.log("server 8 en ecoute sur http://127.0.0.1:3000/");
+});
+
+--------.ejs
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      <%= typeof nomDePage !== 'undefined' ? nomDePage : 'Titre par défaut' %>
+    </title>
+  </head>
+  <body>
+    <header>
+      <h1>
+        <%= typeof titreH1 !== 'undefined' ? titreH1 : 'Titre par défaut' %>
+      </h1>
+      <p>Lorem ipsum dolor sit amet.</p>
+    </header>
+  </body>
+</html>
+
+***********exe9
+/*
+
+ UTILISATION DES TEMPLATES - MINI SITE
+
+ Exercice
+ utilisez ejs pour transformer vos trois documents HTML de la partie Fichiers-statiques en template.
+ Utilisez une convention de nommage différente pour les fichiers EJS et HTML
+ (index.html donne index_ejs.ejs
+ )
+*/
+
+const express = require("express");
+
+// Création de l'application Express
+const app = express();
+
+// Définition du numéro de port sur lequel l'application sera écoutée
+const port = 3000;
+
+// Configuration pour utiliser EJS comme moteur de rendu des vues
+app.set("view engine", "ejs");
+
+// Configuration pour indiquer le dossier contenant les fichiers de vues
+app.set("views", "./views");
+
+// Configuration pour servir les fichiers statiques (CSS, JS, images, etc.) depuis le dossier 'public'
+app.use(express.static("public"));
+
+// Route pour la page d'accueil
+app.get("/", (req, res) => {
+  // Rendre la vue 'index_ejs.ejs' sans passer de variables
+  res.render("index_ejs", {});
+});
+
+// Route pour la page de contact
+app.get("/contact", (req, res) => {
+  // Rendre la vue 'contact_ejs.ejs' sans passer de variables
+  res.render("contact_ejs", {});
+});
+
+// Route pour la page 'À propos'
+app.get("/about", (req, res) => {
+  // Rendre la vue 'about_ejs.ejs' sans passer de variables
+  res.render("about_ejs", {});
+});
+// Middleware pour la gestion des erreurs 404
+app.use((req, res, next) => {
+  res.status(404).render("404_ejs");
+});
+
+// Démarrage du serveur sur le port spécifié
+app.listen(port, () => {
+  console.log("Serveur en écoute sur http://127.0.0.1:3000/");
+});
+
+
+ *************exe 10*********
+ /*
+balise EJS :
+<% ... %> : Code JavaScript sans sortie HTML.
+  <% var year = new Date().getFullYear(); %>
+
+<%_ ... %> : Code JavaScript sans sortie HTML et suppression des espaces blancs avant la balise.
+     <%_ var year = new Date().getFullYear(); %>
+
+   <%= ... %> : Insérer du code JavaScript avec sortie HTML échappée.
+  <p>Année actuelle : <%= year %></p>
+
+<%- ... %> : Insérer du code JavaScript avec sortie HTML non échappée.
+  <p>Description: <%- "<strong>Description en gras</strong>" %></p>
+
+<%# ... %> : Commentaire qui n'est pas exécuté ni inclus dans la sortie HTML.
+  <%# Ceci est un commentaire et n'apparaîtra pas dans le HTML généré %>
+
+  
+TEMPLATE EJS - INCLUSION
+
+Présentation
+Pour éviter la répétition de plusieurs lignes de code similaires dans différents templates EJS, il est possible d'utiliser l'inclusion.
+L'inclusion en EJS permet de diviser votre code en petits morceaux réutilisables que vous pouvez inclure dans plusieurs templates. 
+Cela facilite la maintenance et la lisibilité du code. 
+Pour inclure un fichier dans un template EJS, vous pouvez utiliser la directive <%- include('fichier') %>, où fichier est le nom du fichier EJS que vous souhaitez inclure.
+https://www.digitalocean.com/community/tutorials/how-to-use-ejs-to-template-your-node-application-fr
+
+*/
+
+/*
+Exercice
+
+ 1 
+Reprenez le code de l'exercice précédent.
+creez un dossier partials dans views
+*/
+--------about
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>about</title>
+    <link rel="stylesheet" href="/css/styles.css" />
+  </head>
+  <body>
+    <%- include('partials/header') %>
+    
+    <h1>About</h1>
+    <footer>
+      <p>&copy; 2023 - Mon Site. Tous droits réservés.</p>
+    </footer>
+  </body>
+</html>
+
+
+<header>
+  <nav>
+    <img src="/img/fullStack.png" alt="En-tête" />
+    <a href="/">Accueil</a>
+    <a href="/about">about</a>
+    <a href="/contact">contact </a>
+  </nav>
+</header>

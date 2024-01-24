@@ -1,0 +1,6 @@
+npm init -y // permet d'accepter tout
+npm install express // install express
+npm install ejs // install ejs
+
+
+npm install body-parser  //

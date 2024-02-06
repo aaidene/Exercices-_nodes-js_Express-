@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Formulaire de Connexion</title>
+  </head>
+  <body>
+    <h2>Formulaire de Connexion</h2>
+    <form id="login-form">
+      <label for="username">Nom d'utilisateur:</label>
+      <input type="text" id="username" name="username" required />
+      <button type="submit">Se Connecter</button>
+    </form>
+    <script src= https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js></script>
+   
+    <script>
+         const socket = io();
+      document
+        .getElementById("login-form")
+        .addEventListener("submit", (event) => {
+          event.preventDefault();
+
+          const username = document.getElementById("username").value;
+           console.log(username)
+          
+          socket.connect();
+          socket.emit('login', username);
+          console.log("Formulaire de connexion soumis avec succès.");
+
+        });
+
+         socket.on("login-success", (message) => {
+        console.log(message);
+      });
+    </script>
+  </body>
+</html>

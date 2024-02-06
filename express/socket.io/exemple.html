@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <h1>Socket.IO exemple</h1>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      // Connexion au serveur Socket.IO
+      const socket = io();
+
+      // Écoute de l'événement "chat message" envoyé par le serveur
+      socket.on("chat message", function (msg) {
+        console.log("Message reçu:", msg);
+      });
+
+      // Émission d'un événement "chat message" vers le serveur avec le message "Hello Socket.IO!"
+      socket.emit("chat message", "Hello Socket.IO!");
+    </script>
+  </body>
+</html>
